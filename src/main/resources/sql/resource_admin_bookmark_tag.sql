@@ -1,0 +1,10 @@
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('9722d5f1eb984032a85a7bf9da0f1782', '876a9dd19884481dba118fee380fb15a');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('b76949b1445d4560bec5b2e476739f1b', '0bf337202e3c4a58b0f5e71792dff6e6');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('b76949b1445d4560bec5b2e476739f1b', '99fe5cd07d504933a609934c6a8af171');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('b76949b1445d4560bec5b2e476739f1b', 'b7ba78ceb2cd4b7fa68d4bec0579b3b5');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('c6bc4be6770d40b28400e6cc3b54eb48', '5555cf8533294cff8ece8c7b6d75c223');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('c6bc4be6770d40b28400e6cc3b54eb48', '66cf8318a79e48719e300f76e5535601');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('c6bc4be6770d40b28400e6cc3b54eb48', 'c5bde22f32824d3da62c329d1e45c205');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('f7ca52f20a504a1d851ec867e7a8bef5', '06852b05d85146ada54223c51d8b3d70');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('f7ca52f20a504a1d851ec867e7a8bef5', '43c48ac803264a5c8ec6f7e566ff19d8');
+INSERT INTO resource_admin.bookmark_tag (bookmark_id, tag_id) VALUES ('f7ca52f20a504a1d851ec867e7a8bef5', '5555cf8533294cff8ece8c7b6d75c223');
