@@ -4,7 +4,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.MD5;
+import com.querydsl.core.types.QBean;
 import com.resource.admin.entity.Bookmark;
+import com.resource.admin.entity.QBookmark;
 import com.resource.admin.mapper.BookmarkRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.swing.text.html.HTMLDocument;
+import java.awt.print.Book;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,9 +37,9 @@ public class ResourceAdminApplicationTests {
     @Test
     public void saveBookmarkTest() {
         Bookmark bookmark = new Bookmark();
-        bookmark.setId("204dc229ca6d4d5b918529ff50a24194");
-        bookmark.setBookmarkDescription("MATERIAL-UI");
-        bookmark.setBookmarkUrl("https://material-ui.com/zh/");
+        bookmark.setId(IdUtil.fastSimpleUUID());
+        bookmark.setBookmarkDescription("使用QueryDSL");
+        bookmark.setBookmarkUrl("https://www.jianshu.com/p/2b68af9aa0f5");
         bookmark.setCreateTime(new Date());
         bookmark.setLastUpdateTime(new Date());
         bookmark.setDeleteBool(1);
@@ -83,6 +86,12 @@ public class ResourceAdminApplicationTests {
                 list.remove(s);
             }
         }
+    }
+
+    @Test
+    public void querydslTest() {
+        QBookmark qBookmark = QBookmark.bookmark;
+
     }
 
 
