@@ -1,24 +1,24 @@
 package com.resource.admin.service;
 
 import com.resource.admin.entity.Bookmark;
-import com.resource.admin.entity.request.BookmarkSelectRequestBody;
-import com.resource.admin.entity.response.PaginationData;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 public interface BookmarkService {
 
-    String insertBookmark(Bookmark bookmark);
+    List<Bookmark> findAllByBookmarkDescriptionLike(String description);
 
-    String updateBookmark(Bookmark bookmark);
+    @Transactional
+    void save(Bookmark bookmark);
 
-    String updateDeleteBoolStatus(String[] ids, Integer deleteBool);
+    @Transactional
+    void updateDeleteBoolById(String id, Integer deleteBool);
 
-    String multipleDeleteBookmark(String[] bookmarkIds);
+    @Transactional
+    void deleteById(String id);
 
-    PaginationData getBookmarkListByCondition(BookmarkSelectRequestBody bookmarkSelectRequestBody);
-
-
+    void transactionUpdate(String id, Integer deleteBool, Date lastUpdateTime);
 }

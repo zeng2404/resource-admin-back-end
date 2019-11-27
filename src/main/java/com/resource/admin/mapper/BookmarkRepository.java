@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,14 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, String>, Jpa
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE bookmark SET delete_bool = ?2 WHERE id IN ?1")
     void changeBookmarksStatus(String[] ids, Integer deleteBool);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE bookmark SET delete_bool = ?2 WHERE id = ?1")
+    void changeDeleteBoolById(String id, Integer deleteBool);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE bookmark SET last_update_time = ?2 WHERE id = ?1")
+    void changeLastUpdateTimeById(String id, Date date);
 
     @Query(nativeQuery = true, value = "SELECT t1.* FROM bookmark t1 " +
             "WHERE t1.id IN (" +
