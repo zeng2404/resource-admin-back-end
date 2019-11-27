@@ -1,13 +1,13 @@
-package com.resource.admin.service;
+package com.resource.admin.service.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class BaseService {
+public class BaseServiceImpl {
 
     @Autowired
     @PersistenceContext
@@ -16,12 +16,9 @@ public class BaseService {
     @Autowired
     protected JPAQueryFactory queryFactory;
 
-    @PostConstruct
-    public void init() {
-        queryFactory = new JPAQueryFactory(entityManager);
+    @Bean
+    public JPAQueryFactory queryFactory(EntityManager entityManager) {
+        return new JPAQueryFactory(entityManager);
     }
-
-
-
 
 }

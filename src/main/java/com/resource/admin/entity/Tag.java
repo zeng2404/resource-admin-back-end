@@ -1,7 +1,6 @@
 package com.resource.admin.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import java.util.Date;
 
 @Data
 @Entity
-@DynamicUpdate
 @Table(name = "tag")
 public class Tag {
 

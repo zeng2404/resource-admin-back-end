@@ -1,13 +1,12 @@
 package com.resource.admin;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.digest.MD5;
-import com.querydsl.core.types.QBean;
 import com.resource.admin.entity.Bookmark;
 import com.resource.admin.entity.QBookmark;
 import com.resource.admin.mapper.BookmarkRepository;
+import com.resource.admin.service.BookmarkService;
+import com.resource.admin.service.impl.BookmarkServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,13 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.text.html.HTMLDocument;
-import java.awt.print.Book;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,6 +27,9 @@ import java.util.Iterator;
 public class ResourceAdminApplicationTests {
     @Autowired
     private BookmarkRepository bookmarkRepository;
+
+    @Autowired
+    private BookmarkService bookmarkService;
 
     @Test
     public void contextLoads() {
@@ -88,11 +89,70 @@ public class ResourceAdminApplicationTests {
         }
     }
 
-    @Test
-    public void querydslTest() {
-        QBookmark qBookmark = QBookmark.bookmark;
 
+    @Test
+    public void querydslFirstTest() {
+        QBookmark qBookmark = QBookmark.bookmark;
+        List<Bookmark> bookmarkList = bookmarkService.findAllByBookmarkDescriptionLike("%UI%");
+        log.info("list: {}", bookmarkList);
     }
 
+    @Test
+    public void querydslSaveTest() {
+        Bookmark bookmark = new Bookmark();
+        final String PRIMARY_KEY = IdUtil.fastSimpleUUID();
+        bookmark.setId(PRIMARY_KEY);
+        bookmark.setCreateTime(new Date());
+        bookmark.setLastUpdateTime(new Date());
+        bookmark.setDeleteBool(1);
+        bookmark.setBookmarkUrl("https://blog.csdn.net/WZH577/article/details/100877478");
+        bookmark.setBookmarkDescription("SpringBoot整合QueryDSL");
+        bookmarkService.save(bookmark);
+    }
+
+    @Test
+    public void querydslUpdateTest() {
+        final String PRIMARY_KEY = "9722d5f1eb984032a85a7bf9da0f1782";
+        bookmarkService.updateDeleteBoolById(PRIMARY_KEY, 1);
+    }
+
+    @Test
+    public void querydslDeleteTest() {
+        final String PRIMARY_KEY = "65b1ef54ba84420d912a0d764073c0a2";
+        bookmarkService.deleteById(PRIMARY_KEY);
+    }
+
+    @Test
+    public void querydslTransactionTest() {
+        final String PRIMARY_KEY = "e1a663695bb042f788ac6cceb1cb7799";
+        bookmarkService.transactionUpdate(PRIMARY_KEY, 0, new Date());
+    }
+
+    @Test
+    public void finallyTest() {
+        finallyFunction();
+        log.info("end");
+    }
+
+    private int finallyFunction() {
+        try {
+            log.info("outer begin");
+            try {
+                log.info("begin");
+                int a = 1 / 0;
+                return 1;
+            } catch (Exception e) {
+                log.info("zero1");
+            } finally {
+                log.info("finally");
+            }
+            log.info("pause");
+        } catch (Exception e) {
+            log.info("zero2");
+        } finally {
+            log.info("outer");
+        }
+        return 2;
+    }
 
 }
