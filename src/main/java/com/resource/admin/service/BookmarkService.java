@@ -21,4 +21,10 @@ public interface BookmarkService {
     void deleteById(String id);
 
     void transactionUpdate(String id, Integer deleteBool, Date lastUpdateTime);
+
+    List<Bookmark> getByDescriptionOrUrlContains(String condition);
+
+    List<Bookmark> getByDescriptionAndUrlContains(String description, String url);
+
+    List<Bookmark> getByMultipleCondition(String description, String firstUrl, String secondUrl);
 }

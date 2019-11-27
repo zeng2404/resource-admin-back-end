@@ -129,6 +129,29 @@ public class ResourceAdminApplicationTests {
     }
 
     @Test
+    public void querydslOrSelectTest() {
+        String condition = "dsl";
+        List<Bookmark> bookmarkList = bookmarkService.getByDescriptionOrUrlContains(condition);
+        log.info("list: {}", bookmarkList);
+    }
+
+    @Test
+    public void querydslAndSelectTest() {
+        String description = "dsl";
+        String url = "csdn";
+        List<Bookmark> bookmarkList = bookmarkService.getByDescriptionAndUrlContains(description, url);
+        log.info("list: {}", bookmarkList);
+    }
+
+    @Test
+    public void querydslMultipleSelectTest() {
+        String first = "dsl";
+        String url = "cdsn";
+        String second = "jianshu";
+        List<Bookmark> bookmarkList = bookmarkService.getByMultipleCondition(first, url, second);
+        log.info("list: {}", bookmarkList);
+    }
+    @Test
     public void finallyTest() {
         finallyFunction();
         log.info("end");
