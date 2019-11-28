@@ -1,14 +1,18 @@
 package com.resource.admin.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.resource.admin.entity.Bookmark;
 import com.resource.admin.entity.QBookmark;
+import com.resource.admin.entity.QBookmarkTag;
+import com.resource.admin.entity.QTag;
 import com.resource.admin.mapper.BookmarkRepository;
 import com.resource.admin.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -106,6 +110,22 @@ public class BookmarkServiceImpl extends BaseServiceImpl implements BookmarkServ
                 .or(qBookmark.bookmarkDescription.containsIgnoreCase(secondDescription)))
                 .fetch();
         return bookmarkList;
+    }
+
+    @Override
+    public List<Tuple> getBookmarkInnerJoin(String bookmarkId) {
+        QBookmark qBookmark = QBookmark.bookmark;
+        QBookmarkTag qBookmarkTag = QBookmarkTag.bookmarkTag;
+        QTag qTag = QTag.tag;
+        List<Tuple> tupleList = queryFactory.select(qBookmark.id, qBookmark.bookmarkDescription, qBookmark.bookmarkDescription, qBookmarkTag.tagId, qTag.tagName)
+                .from(qBookmark)
+                .innerJoin(qBookmarkTag)
+                .on(qBookmarkTag.bookmarkId.eq(qBookmark.id))
+                .innerJoin(qTag)
+                .on(qTag.id.eq(qBookmarkTag.tagId))
+                .where(qBookmark.id.eq(bookmarkId))
+                .fetch();
+        return tupleList;
     }
 
 

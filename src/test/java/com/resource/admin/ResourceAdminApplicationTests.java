@@ -2,6 +2,7 @@ package com.resource.admin;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.querydsl.core.Tuple;
 import com.resource.admin.entity.Bookmark;
 import com.resource.admin.entity.QBookmark;
 import com.resource.admin.mapper.BookmarkRepository;
@@ -164,6 +165,13 @@ public class ResourceAdminApplicationTests {
     public void finallyTest() {
         finallyFunction();
         log.info("end");
+    }
+
+    @Test
+    public void querydslInnerJoinTest() {
+        List<Tuple> tupleList = bookmarkService.getBookmarkInnerJoin("b76949b1445d4560bec5b2e476739f1b");
+        log.info("list: {}", tupleList);
+
     }
 
     private int finallyFunction() {

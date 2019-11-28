@@ -1,9 +1,13 @@
 package com.resource.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Table(name = "bookmark")
@@ -27,8 +31,5 @@ public class Bookmark {
 
     @Column(name = "delete_bool")
     private Integer deleteBool;
-
-    @Transient
-    private String[] tagIds;
 
 }

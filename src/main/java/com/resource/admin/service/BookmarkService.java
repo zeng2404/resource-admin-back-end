@@ -1,5 +1,6 @@
 package com.resource.admin.service;
 
+import com.querydsl.core.Tuple;
 import com.resource.admin.entity.Bookmark;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,4 +30,6 @@ public interface BookmarkService {
     List<Bookmark> getByMultipleCondition(String description, String firstUrl, String secondUrl);
 
     List<Bookmark> getByCondition(String firstDescription, String firstUrl, String secondDescription);
+
+    List<Tuple> getBookmarkInnerJoin(String bookmarkId);
 }
