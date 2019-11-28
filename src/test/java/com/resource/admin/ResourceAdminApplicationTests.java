@@ -151,6 +151,15 @@ public class ResourceAdminApplicationTests {
         List<Bookmark> bookmarkList = bookmarkService.getByMultipleCondition(first, url, second);
         log.info("list: {}", bookmarkList);
     }
+
+    @Test
+    public void querydslSelectTest() {
+        String first = "dsl";
+        String url = "csdn";
+        String second = "YAML";
+        List<Bookmark> bookmarkList = bookmarkService.getByCondition(first, url, second);
+        log.info("list: {}", bookmarkList);
+    }
     @Test
     public void finallyTest() {
         finallyFunction();

@@ -97,5 +97,16 @@ public class BookmarkServiceImpl extends BaseServiceImpl implements BookmarkServ
         return bookmarkList;
     }
 
+    @Override
+    public List<Bookmark> getByCondition(String firstDescription, String firstUrl, String secondDescription) {
+        QBookmark qBookmark = QBookmark.bookmark;
+        List<Bookmark> bookmarkList = queryFactory.selectFrom(qBookmark)
+                .where(qBookmark.bookmarkDescription.containsIgnoreCase(firstDescription)
+                .and(qBookmark.bookmarkUrl.containsIgnoreCase(firstUrl))
+                .or(qBookmark.bookmarkDescription.containsIgnoreCase(secondDescription)))
+                .fetch();
+        return bookmarkList;
+    }
+
 
 }

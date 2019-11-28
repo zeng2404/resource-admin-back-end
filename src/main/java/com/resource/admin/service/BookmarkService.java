@@ -27,4 +27,6 @@ public interface BookmarkService {
     List<Bookmark> getByDescriptionAndUrlContains(String description, String url);
 
     List<Bookmark> getByMultipleCondition(String description, String firstUrl, String secondUrl);
+
+    List<Bookmark> getByCondition(String firstDescription, String firstUrl, String secondDescription);
 }
