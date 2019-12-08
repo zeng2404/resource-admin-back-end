@@ -1,35 +1,18 @@
 package com.resource.admin.service;
 
-import com.querydsl.core.Tuple;
 import com.resource.admin.entity.Bookmark;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
+import com.resource.admin.entity.response.PaginationData;
 
 public interface BookmarkService {
 
-    List<Bookmark> findAllByBookmarkDescriptionLike(String description);
+    String saveBookmark(Bookmark bookmark);
 
-    @Transactional
-    void save(Bookmark bookmark);
+    String updateBookmark(Bookmark bookmark);
 
-    @Transactional
-    void updateDeleteBoolById(String id, Integer deleteBool);
+    String changeBookmarksDeleteStatus(String[] ids, Integer deleteBool);
 
-    @Transactional
-    void deleteById(String id);
+    PaginationData getBookmarksByCondition(String condition, String conditionType,
+                                           Integer currentPageNumber, Integer pageSize);
 
-    void transactionUpdate(String id, Integer deleteBool, Date lastUpdateTime);
-
-    List<Bookmark> getByDescriptionOrUrlContains(String condition);
-
-    List<Bookmark> getByDescriptionAndUrlContains(String description, String url);
-
-    List<Bookmark> getByMultipleCondition(String description, String firstUrl, String secondUrl);
-
-    List<Bookmark> getByCondition(String firstDescription, String firstUrl, String secondDescription);
-
-    List<Tuple> getBookmarkInnerJoin(String bookmarkId);
+    String deleteBookmarks(String[] ids);
 }

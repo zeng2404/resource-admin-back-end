@@ -19,4 +19,11 @@ public class BookmarkTag {
     @Column(name = "tag_id")
     private String tagId;
 
+    public BookmarkTag(String bookmarkId, String tagId) {
+        this.bookmarkId = bookmarkId;
+        this.tagId = tagId;
+    }
+
+    public BookmarkTag() {
+    }
 }

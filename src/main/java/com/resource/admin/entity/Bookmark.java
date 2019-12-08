@@ -32,4 +32,7 @@ public class Bookmark {
     @Column(name = "delete_bool")
     private Integer deleteBool;
 
+    @Transient
+    private String[] tagIds;
+
 }

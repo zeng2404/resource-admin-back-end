@@ -1,9 +1,9 @@
 package com.resource.admin.entity.key;
 
-
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 public class BookmarkTagKey implements Serializable {
@@ -13,43 +13,16 @@ public class BookmarkTagKey implements Serializable {
     private String tagId;
 
     @Override
-    public boolean equals(Object object) {
-        if(this == object){
-            return true;
-        }
-        if(object == null){
-            return false;
-        }
-        if(getClass() != object.getClass()){
-            return false;
-        }
-
-        final BookmarkTagKey other = (BookmarkTagKey) object;
-
-        if(bookmarkId == null){
-            if(other.bookmarkId != null){
-                return false;
-            }
-        }else if(!bookmarkId.equals(other.bookmarkId)){
-            return false;
-        }
-        if(tagId == null){
-            if(other.tagId != null){
-                return false;
-            }
-        }else if(!tagId.equals(other.tagId)){
-            return false;
-        }
-
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookmarkTagKey that = (BookmarkTagKey) o;
+        return Objects.equals(bookmarkId, that.bookmarkId) &&
+                Objects.equals(tagId, that.tagId);
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
-        int result = 1;
-        result = PRIME * result + ((bookmarkId == null) ? 0 :bookmarkId.hashCode());
-        result = PRIME * result + ((tagId == null) ? 0 :tagId.hashCode());
-        return result;
+        return Objects.hash(bookmarkId, tagId);
     }
 }

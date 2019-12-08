@@ -10,4 +10,6 @@ public class PaginationData implements Serializable{
     private Object data;
     // 数据总数量
     private Long total;
+    // 状态码
+    private String statusCode;
 }

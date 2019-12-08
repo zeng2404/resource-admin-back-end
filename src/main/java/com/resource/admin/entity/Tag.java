@@ -2,6 +2,7 @@ package com.resource.admin.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.context.annotation.Lazy;
 
@@ -28,5 +29,8 @@ public class Tag {
 
     @Column(name = "last_update_time")
     private Date lastUpdateTime;
+
+    @Column(name = "delete_bool")
+    private Integer deleteBool;
 
 }

@@ -1,132 +1,110 @@
 package com.resource.admin.service.impl;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.StringExpression;
+import cn.hutool.core.util.IdUtil;
 import com.resource.admin.entity.Bookmark;
-import com.resource.admin.entity.QBookmark;
-import com.resource.admin.entity.QBookmarkTag;
-import com.resource.admin.entity.QTag;
-import com.resource.admin.mapper.BookmarkRepository;
+import com.resource.admin.entity.BookmarkTag;
+import com.resource.admin.entity.response.PaginationData;
+import com.resource.admin.mapper.BookmarkMapper;
+import com.resource.admin.mapper.BookmarkTagMapper;
 import com.resource.admin.service.BookmarkService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class BookmarkServiceImpl extends BaseServiceImpl implements BookmarkService {
+@Slf4j
+public class BookmarkServiceImpl implements BookmarkService {
 
     @Autowired
-    private BookmarkRepository bookmarkRepository;
+    private BookmarkMapper bookmarkMapper;
 
-    private QBookmark qBookmark = QBookmark.bookmark;
+    @Autowired
+    private BookmarkTagMapper bookmarkTagMapper;
 
-    public List<Bookmark> findAllByBookmarkDescriptionLike(String description) {
-        return queryFactory.selectFrom(qBookmark)
-                .where(qBookmark.bookmarkDescription.like(description))
-                .fetch();
+    @Transactional
+    @Override
+    public String saveBookmark(Bookmark bookmark) {
+        try {
+            String PRIMARY_KEY = IdUtil.fastSimpleUUID();
+            Date now = new Date();
+            bookmark.setId(PRIMARY_KEY);
+            bookmark.setLastUpdateTime(now);
+            bookmark.setCreateTime(now);
+            bookmark.setDeleteBool(0);
+            bookmarkMapper.saveBookmark(bookmark);
+            updateBookmarkTag(PRIMARY_KEY, bookmark.getTagIds());
+            return "500";
+        } catch (Exception e) {
+            log.error("error: " + e);
+            return "500";
+        }
     }
 
-    public void save(Bookmark bookmark) {
-        entityManager.persist(bookmark);
+    @Transactional
+    @Override
+    public String updateBookmark(Bookmark bookmark) {
+        try {
+            bookmarkMapper.updateBookmark(bookmark);
+            updateBookmarkTag(bookmark.getId(), bookmark.getTagIds());
+            return "200";
+        } catch (Exception e) {
+            log.error("error: " + e);
+            return "500";
+        }
     }
 
     @Override
-    public void updateDeleteBoolById(String id, Integer deleteBool) {
-        queryFactory.update(qBookmark)
-                .set(qBookmark.deleteBool, deleteBool)
-                .where(qBookmark.id.eq(id))
-                .execute();
+    public String changeBookmarksDeleteStatus(String[] ids, Integer deleteBool) {
+        try {
+            bookmarkMapper.changeBookmarksDeleteStatus(ids,deleteBool);
+            return "200";
+        } catch (Exception e) {
+            log.error("error: " + e);
+            return "500";
+        }
     }
 
     @Override
-    public void deleteById(String id) {
-        queryFactory.delete(qBookmark)
-                .where(qBookmark.id.eq(id))
-                .execute();
+    public PaginationData getBookmarksByCondition(String condition, String conditionType, Integer currentPageNumber, Integer pageSize) {
+        PaginationData paginationData;
+        try {
+            paginationData = bookmarkMapper.getBookmarksByCondition(condition, conditionType,
+                    currentPageNumber, pageSize);
+            paginationData.setStatusCode("200");
+        } catch (Exception e) {
+            log.error("error: " + e);
+            paginationData = new PaginationData();
+            paginationData.setStatusCode("500");
+        }
+        return paginationData;
     }
 
+    private void updateBookmarkTag(String bookmarkId, String[] tagIds) {
+        bookmarkTagMapper.deleteByBookmarkIds(new String[]{bookmarkId});
+        List<BookmarkTag> bookmarkTagList = Arrays.stream(tagIds)
+                .parallel()
+                .map(p -> {
+                    return new BookmarkTag(bookmarkId, p);
+                }).collect(Collectors.toList());
+        bookmarkTagMapper.batchSave(bookmarkTagList);
+    }
+
+    @Transactional
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void transactionUpdate(String id, Integer deleteBool, Date lastUpdateTime) {
-
-        queryFactory.update(qBookmark)
-                .set(qBookmark.lastUpdateTime, lastUpdateTime)
-                .where(qBookmark.id.eq(id))
-                .execute();
-
-        int a = 1 / 0;
-
-        queryFactory.update(qBookmark)
-                .set(qBookmark.deleteBool, deleteBool)
-                .where(qBookmark.id.eq(id))
-                .execute();
-
+    public String deleteBookmarks(String[] ids) {
+        try {
+            bookmarkMapper.deleteBookmarks(ids);
+            bookmarkTagMapper.deleteByBookmarkIds(ids);
+            return "500";
+        } catch (Exception e) {
+            log.error("error: " + e);
+            return "200";
+        }
     }
-
-    public List<Bookmark> getByDescriptionOrUrlContains(String condition) {
-        QBookmark qBookmark = QBookmark.bookmark;
-        List<Bookmark> bookmarkList = queryFactory.selectFrom(qBookmark)
-                .where(qBookmark.bookmarkDescription.containsIgnoreCase(condition)
-                .or(qBookmark.bookmarkUrl.containsIgnoreCase(condition)))
-                .fetch();
-        return bookmarkList;
-    }
-
-    @Override
-    public List<Bookmark> getByDescriptionAndUrlContains(String description, String url) {
-        QBookmark qBookmark = QBookmark.bookmark;
-        List<Bookmark> bookmarkList = queryFactory.selectFrom(qBookmark)
-                .where(qBookmark.bookmarkDescription.containsIgnoreCase(description)
-                .and(qBookmark.bookmarkUrl.containsIgnoreCase(url)))
-                .fetch();
-        return bookmarkList;
-    }
-
-    @Override
-    public List<Bookmark> getByMultipleCondition(String description, String firstUrl, String secondUrl) {
-        QBookmark qBookmark = QBookmark.bookmark;
-        List<Bookmark> bookmarkList = queryFactory.selectFrom(qBookmark)
-                .where(qBookmark.bookmarkDescription.containsIgnoreCase(description).and(
-                        qBookmark.bookmarkUrl.containsIgnoreCase(firstUrl).or(qBookmark.bookmarkUrl.containsIgnoreCase(secondUrl))
-                ))
-                .fetch();
-        return bookmarkList;
-    }
-
-    @Override
-    public List<Bookmark> getByCondition(String firstDescription, String firstUrl, String secondDescription) {
-        QBookmark qBookmark = QBookmark.bookmark;
-        List<Bookmark> bookmarkList = queryFactory.selectFrom(qBookmark)
-                .where(qBookmark.bookmarkDescription.containsIgnoreCase(firstDescription)
-                .and(qBookmark.bookmarkUrl.containsIgnoreCase(firstUrl))
-                .or(qBookmark.bookmarkDescription.containsIgnoreCase(secondDescription)))
-                .fetch();
-        return bookmarkList;
-    }
-
-    @Override
-    public List<Tuple> getBookmarkInnerJoin(String bookmarkId) {
-        QBookmark qBookmark = QBookmark.bookmark;
-        QBookmarkTag qBookmarkTag = QBookmarkTag.bookmarkTag;
-        QTag qTag = QTag.tag;
-        List<Tuple> tupleList = queryFactory.select(qBookmark.id, qBookmark.bookmarkDescription, qBookmark.bookmarkDescription, qBookmarkTag.tagId, qTag.tagName)
-                .from(qBookmark)
-                .innerJoin(qBookmarkTag)
-                .on(qBookmarkTag.bookmarkId.eq(qBookmark.id))
-                .innerJoin(qTag)
-                .on(qTag.id.eq(qBookmarkTag.tagId))
-                .where(qBookmark.id.eq(bookmarkId))
-                .fetch();
-        return tupleList;
-    }
-
-
 }
