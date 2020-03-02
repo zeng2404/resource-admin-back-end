@@ -14,8 +14,6 @@ public interface TagService {
     @Transactional
     String updateTag(Tag tag);
 
-    String changeTagsDeleteStatus(String[] ids, Integer deleteBool);
-
     String deleteTags(String[] ids);
 
     PaginationData getTags(String condition, String conditionType, Integer pageSize, Integer currentPageNumber);

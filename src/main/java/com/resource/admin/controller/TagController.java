@@ -46,17 +46,10 @@ public class TagController {
         }
     }
 
-    @PutMapping(value = "tag/{ids}")
-    public JSONObject handleTag(@PathVariable(value = "ids") String[] ids, @RequestBody TagPutRequest tagPutRequest) {
-        JSONObject jsonObject = null;
-        if ("updateTag".equals(tagPutRequest.getHandleType())) {
-            jsonObject = updateTag(tagPutRequest.getTag());
-        }
-        else if("updateDeleteStatus".equals(tagPutRequest.getHandleType())) {
-            jsonObject = updateTagDeleteStatus(ids, tagPutRequest.getTag().getDeleteBool());
-        }
-        return jsonObject;
-    }
+//    @PutMapping(value = "tag/{ids}")
+//    public JSONObject handleTag(@PathVariable(value = "ids") String[] ids, @RequestBody TagPutRequest tagPutRequest) {
+//
+//    }
 
     @DeleteMapping(value = "tag/{ids}")
     public JSONObject deleteTags(@PathVariable(value = "ids") String[] ids) {
@@ -100,13 +93,5 @@ public class TagController {
         }
     }
 
-    private JSONObject updateTagDeleteStatus(String[] ids, Integer deleteBool) {
-        String statusCode = tagService.changeTagsDeleteStatus(ids, deleteBool);
-        if ("200".equals(statusCode)) {
-            return JSONResult.SUCCESS_RESULT;
-        }
-        else {
-            return JSONResult.SUCCESS_RESULT;
-        }
-    }
+
 }

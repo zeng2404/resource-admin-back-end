@@ -41,14 +41,6 @@ public class TagMapper{
                 .execute();
     }
 
-    public void batchUpdateDeleteStatus(String[] ids, Integer deleteBool) {
-        queryFactory.update(qTag)
-                .set(qTag.lastUpdateTime, new Date())
-                .set(qTag.deleteBool, deleteBool)
-                .where(qTag.id.in(ids))
-                .execute();
-    }
-
     public void deleteTags(String[] ids) {
         queryFactory.delete(qTag)
                 .where(qTag.id.in(ids))

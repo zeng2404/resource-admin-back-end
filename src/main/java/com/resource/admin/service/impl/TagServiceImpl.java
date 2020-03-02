@@ -38,7 +38,6 @@ public class TagServiceImpl implements TagService {
                 tag.setLastUpdateTime(now);
                 tag.setCreateTime(now);
                 tag.setId(PRIMARY_KEY);
-                tag.setDeleteBool(0);
                 tagMapper.saveTag(tag);
                 return "200";
             }
@@ -58,17 +57,6 @@ public class TagServiceImpl implements TagService {
                 tagMapper.update(tag);
                 return "200";
             }
-        } catch (Exception e) {
-            log.error("error: " + e);
-            return "500";
-        }
-    }
-
-    @Override
-    public String changeTagsDeleteStatus(String[] ids, Integer deleteBool) {
-        try {
-            tagMapper.batchUpdateDeleteStatus(ids, deleteBool);
-            return "200";
         } catch (Exception e) {
             log.error("error: " + e);
             return "500";
