@@ -77,8 +77,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public PaginationData getTags(String condition, String conditionType, Integer currentPageNumber,
-                                  Integer pageSize) {
+    public PaginationData getTags(String condition, String conditionType, Integer pageSize,
+                                  Integer currentPageNumber) {
         PaginationData paginationData = null;
         try {
             paginationData = tagMapper.getTags(condition, conditionType, currentPageNumber, pageSize);

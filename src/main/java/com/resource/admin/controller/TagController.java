@@ -46,10 +46,12 @@ public class TagController {
         }
     }
 
-//    @PutMapping(value = "tag/{ids}")
-//    public JSONObject handleTag(@PathVariable(value = "ids") String[] ids, @RequestBody TagPutRequest tagPutRequest) {
-//
-//    }
+    @PutMapping(value = "tag/{ids}")
+    public JSONObject handleTag(@PathVariable(value = "ids") String[] ids, @RequestBody TagPutRequest tagPutRequest) {
+        String handleType = tagPutRequest.getHandleType();
+        Tag tag = tagPutRequest.getTag();
+        return updateTag(tag);
+    }
 
     @DeleteMapping(value = "tag/{ids}")
     public JSONObject deleteTags(@PathVariable(value = "ids") String[] ids) {
