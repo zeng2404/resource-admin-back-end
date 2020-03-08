@@ -26,7 +26,7 @@ import java.util.List;
 
 
 @Repository
-public class BookmarkMapper{
+public class BookmarkMapper {
 
     @Autowired
     private BookmarkRepository bookmarkRepository;
@@ -44,15 +44,6 @@ public class BookmarkMapper{
         bookmarkRepository.save(bookmark);
     }
 
-
-    @Transactional
-    public void changeBookmarksDeleteStatus(String[] bookmarkIds, Integer deleteBool) {
-        queryFactory.update(qBookmark)
-                .set(qBookmark.deleteBool, deleteBool)
-                .where(qBookmark.id.in(bookmarkIds))
-                .execute();
-    }
-
     public void deleteBookmarks(String[] bookmarkIds) {
         queryFactory.delete(qBookmark)
                 .where(qBookmark.id.in(bookmarkIds))
@@ -64,6 +55,7 @@ public class BookmarkMapper{
                 .set(qBookmark.bookmarkDescription, bookmark.getBookmarkDescription())
                 .set(qBookmark.bookmarkUrl, bookmark.getBookmarkUrl())
                 .set(qBookmark.lastUpdateTime, new Date())
+                .where(qBookmark.id.eq(bookmark.getId()))
                 .execute();
     }
 
@@ -80,7 +72,7 @@ public class BookmarkMapper{
                 .on(qBookmark.id.eq(qBookmarkTag.bookmarkId))
                 .innerJoin(qTag)
                 .on(qTag.id.eq(qBookmarkTag.tagId));
-        if(StrUtil.isNotBlank(condition) && StrUtil.isNotBlank(conditionType)) {
+        if (StrUtil.isNotBlank(condition) && StrUtil.isNotBlank(conditionType)) {
             if ("tagId-and".equals(conditionType)) {
                 String[] tagIds = condition.split(",");
                 SubQueryExpression queryExpression = queryFactory.select(qBookmarkTag.bookmarkId)
@@ -88,14 +80,12 @@ public class BookmarkMapper{
                         .where(qBookmarkTag.tagId.in(tagIds))
                         .groupBy(qBookmarkTag.bookmarkId)
                         .having(qBookmarkTag.bookmarkId.count().goe(tagIds.length));
-                query = query.where(qBookmark.id.count().goe(queryExpression));
-            }
-            else if("tagId-or".equals(conditionType)) {
+                query = query.where(qBookmark.id.in(queryExpression));
+            } else if ("tagId-or".equals(conditionType)) {
                 query = query.where(qTag.id.in(condition.split(",")));
-            }
-            else {
+            } else {
                 query = query.where(qBookmark.bookmarkDescription.containsIgnoreCase(condition)
-                .or(qBookmark.bookmarkUrl.containsIgnoreCase(condition)));
+                        .or(qBookmark.bookmarkUrl.containsIgnoreCase(condition)));
             }
         }
         query = query.groupBy(qBookmark.id);

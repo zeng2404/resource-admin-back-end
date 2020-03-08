@@ -6,14 +6,13 @@ import com.resource.admin.entity.response.PaginationData;
 import com.resource.admin.mapper.BookmarkTagMapper;
 import com.resource.admin.mapper.TagMapper;
 import com.resource.admin.service.TagService;
+import com.resource.admin.utils.MapUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -84,6 +83,7 @@ public class TagServiceImpl implements TagService {
             paginationData = tagMapper.getTags(condition, conditionType, currentPageNumber, pageSize);
             paginationData.setStatusCode("200");
         } catch (Exception e) {
+            log.error("error: " + e);
             paginationData = new PaginationData();
             paginationData.setStatusCode("500");
         }
@@ -94,7 +94,9 @@ public class TagServiceImpl implements TagService {
     public Map<String, Object> getTagMenuList() {
         Map<String, Object> map = new HashMap<>();
         try {
-            map.put("data", tagMapper.getTagMenuList());
+            List<String> keyList = Arrays.asList("id", "tagName");
+
+            map.put("data", MapUtil.fromTupleParallel(tagMapper.getTagMenuList(), keyList));
             map.put("statusCode", "200");
         } catch (Exception e) {
             log.error("error: " + e);

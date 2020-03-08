@@ -18,6 +18,7 @@ public interface TagService {
 
     PaginationData getTags(String condition, String conditionType, Integer pageSize, Integer currentPageNumber);
 
+
     Map<String, Object> getTagMenuList();
 
 

@@ -5,7 +5,6 @@ import com.querydsl.core.Tuple;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MapUtil {
@@ -25,7 +24,7 @@ public class MapUtil {
     private static Map<String, Object> fromTuple(Tuple tuple, List<String> keyList) {
         Map<String, Object> map = new HashMap();
         int counter = 0;
-        for(String key : keyList) {
+        for (String key : keyList) {
             map.put(key, tuple.get(counter++, Object.class));
         }
         return map;

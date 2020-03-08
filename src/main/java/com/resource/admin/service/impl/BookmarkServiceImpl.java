@@ -36,10 +36,9 @@ public class BookmarkServiceImpl implements BookmarkService {
             bookmark.setId(PRIMARY_KEY);
             bookmark.setLastUpdateTime(now);
             bookmark.setCreateTime(now);
-            bookmark.setDeleteBool(0);
             bookmarkMapper.saveBookmark(bookmark);
             updateBookmarkTag(PRIMARY_KEY, bookmark.getTagIds());
-            return "500";
+            return "200";
         } catch (Exception e) {
             log.error("error: " + e);
             return "500";
@@ -52,17 +51,6 @@ public class BookmarkServiceImpl implements BookmarkService {
         try {
             bookmarkMapper.updateBookmark(bookmark);
             updateBookmarkTag(bookmark.getId(), bookmark.getTagIds());
-            return "200";
-        } catch (Exception e) {
-            log.error("error: " + e);
-            return "500";
-        }
-    }
-
-    @Override
-    public String changeBookmarksDeleteStatus(String[] ids, Integer deleteBool) {
-        try {
-            bookmarkMapper.changeBookmarksDeleteStatus(ids,deleteBool);
             return "200";
         } catch (Exception e) {
             log.error("error: " + e);
@@ -101,10 +89,10 @@ public class BookmarkServiceImpl implements BookmarkService {
         try {
             bookmarkMapper.deleteBookmarks(ids);
             bookmarkTagMapper.deleteByBookmarkIds(ids);
-            return "500";
+            return "200";
         } catch (Exception e) {
             log.error("error: " + e);
-            return "200";
+            return "500";
         }
     }
 }

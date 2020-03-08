@@ -24,10 +24,9 @@ public class TagController {
                              @RequestParam(value = "currentPageNumber") Integer currentPageNumber,
                              @RequestParam(value = "selectType") String selectType) {
         JSONObject jsonObject = null;
-        if("getTagMenuList".equals(selectType)) {
-           jsonObject = getTagMenuList();
-        }
-        else if("getTagsByCondition".equals(selectType)) {
+        if ("getTagMenuList".equals(selectType)) {
+            jsonObject = getTagMenuList();
+        } else if ("getTagsByCondition".equals(selectType)) {
             jsonObject = getTagsByCondition(condition, conditionType,
                     currentPageNumber, pageSize);
         }
@@ -48,7 +47,6 @@ public class TagController {
 
     @PutMapping(value = "tag/{ids}")
     public JSONObject handleTag(@PathVariable(value = "ids") String[] ids, @RequestBody TagPutRequest tagPutRequest) {
-        String handleType = tagPutRequest.getHandleType();
         Tag tag = tagPutRequest.getTag();
         return updateTag(tag);
     }
@@ -87,10 +85,9 @@ public class TagController {
     private JSONObject getTagMenuList() {
         Map<String, Object> map = tagService.getTagMenuList();
         String statusCode = map.get("statusCode").toString();
-        if("200".equals(statusCode)) {
+        if ("200".equals(statusCode)) {
             return JSONResult.of(200, "", map.get("data"));
-        }
-        else {
+        } else {
             return JSONResult.FAIL_RESULT;
         }
     }

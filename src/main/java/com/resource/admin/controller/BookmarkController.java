@@ -28,8 +28,7 @@ public class BookmarkController {
             String statusCode = paginationData.getStatusCode();
             if ("200".equals(statusCode)) {
                 jsonObject = JSONResult.fromPagination(paginationData.getData(), paginationData.getTotal());
-            }
-            else {
+            } else {
                 jsonObject = JSONResult.FAIL_RESULT;
             }
         }
@@ -41,8 +40,7 @@ public class BookmarkController {
         String statusCode = bookmarkService.saveBookmark(bookmark);
         if ("200".equals(statusCode)) {
             return JSONResult.SUCCESS_RESULT;
-        }
-        else {
+        } else {
             return JSONResult.FAIL_RESULT;
         }
     }
@@ -54,9 +52,6 @@ public class BookmarkController {
         if ("updateBookmark".equals(handleType)) {
             return updateBookmark(bookmarkPutRequest.getBookmark());
         }
-        else if("updateDeleteStatus".equals(handleType)) {
-            return updateBookmarkDeleteStatus(ids, bookmarkPutRequest.getBookmark().getDeleteBool());
-        }
         return null;
     }
 
@@ -65,8 +60,7 @@ public class BookmarkController {
         String statusCode = bookmarkService.deleteBookmarks(ids);
         if ("200".equals(statusCode)) {
             return JSONResult.SUCCESS_RESULT;
-        }
-        else {
+        } else {
             return JSONResult.FAIL_RESULT;
         }
     }
@@ -75,18 +69,7 @@ public class BookmarkController {
         String statusCode = bookmarkService.updateBookmark(bookmark);
         if ("200".equals(statusCode)) {
             return JSONResult.SUCCESS_RESULT;
-        }
-        else {
-            return JSONResult.FAIL_RESULT;
-        }
-    }
-
-    private JSONObject updateBookmarkDeleteStatus(String[] ids, Integer deleteBool) {
-        String statusCode = bookmarkService.changeBookmarksDeleteStatus(ids, deleteBool);
-        if ("200".equals(statusCode)) {
-            return JSONResult.SUCCESS_RESULT;
-        }
-        else {
+        } else {
             return JSONResult.FAIL_RESULT;
         }
     }

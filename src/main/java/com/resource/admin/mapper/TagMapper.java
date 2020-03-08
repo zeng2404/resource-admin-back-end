@@ -13,13 +13,12 @@ import com.resource.admin.utils.QueryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Repository
-public class TagMapper{
+public class TagMapper {
 
     private QTag qTag = QTag.tag;
 
@@ -53,8 +52,14 @@ public class TagMapper{
         QueryBase query = queryFactory.selectFrom(qTag);
         if (StrUtil.isNotBlank(condition) &&
                 StrUtil.isNotBlank(conditionType)) {
-            query = query.where(qTag.tagName.containsIgnoreCase(condition)
-                    .or(qTag.tagDescription.containsIgnoreCase(conditionType)));
+            if ("all".equals(conditionType)) {
+                query = query.where(qTag.tagName.containsIgnoreCase(condition)
+                        .or(qTag.tagDescription.containsIgnoreCase(condition)));
+            } else if ("tagName".equals(conditionType)) {
+                query = query.where(qTag.tagName.containsIgnoreCase(condition));
+            } else if ("tagDescription".equals(conditionType)) {
+                query = query.where(qTag.tagDescription.containsIgnoreCase(condition));
+            }
         }
 
         long count = QueryUtil.fetchCountFromQueryBase(query);

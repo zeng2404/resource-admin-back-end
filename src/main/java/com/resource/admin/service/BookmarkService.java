@@ -9,7 +9,6 @@ public interface BookmarkService {
 
     String updateBookmark(Bookmark bookmark);
 
-    String changeBookmarksDeleteStatus(String[] ids, Integer deleteBool);
 
     PaginationData getBookmarksByCondition(String condition, String conditionType,
                                            Integer currentPageNumber, Integer pageSize);

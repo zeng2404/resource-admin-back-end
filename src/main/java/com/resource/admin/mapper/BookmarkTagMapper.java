@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class BookmarkTagMapper{
+public class BookmarkTagMapper {
 
     @Autowired
     private BookmarkTagRepository bookmarkTagRepository;
